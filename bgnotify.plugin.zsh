@@ -6,7 +6,7 @@
 zmodload zsh/datetime || { print "can't load zsh/datetime"; return } # faster than date()
 autoload -Uz add-zsh-hook || { print "can't add zsh hook!"; return }
 
-(( ${+bgnotify_threshold} )) || bgnotify_threshold=5 #default 10 seconds
+(( ${+bgnotify_threshold} )) || bgnotify_threshold=5 #default 5 seconds
 
 
 ## definitions ##
@@ -16,7 +16,7 @@ if ! (type bgnotify_formatted | grep -q 'function'); then ## allow custom functi
     elapsed="$(( $3 % 60 ))s"
     (( $3 >= 60 )) && elapsed="$((( $3 % 3600) / 60 ))m $elapsed"
     (( $3 >= 3600 )) && elapsed="$(( $3 / 3600 ))h $elapsed"
-    [ $1 -eq 0 ] && bgnotify "#win (took $elapsed)" "$2" || bgnotify "#fail (took $elapsed)" "$2"
+    [ $1 -eq 0 ] && bgnotify "#win ($elapsed)" "$2" || bgnotify "#fail ($elapsed)" "$2"
   }
 fi
 
@@ -34,6 +34,7 @@ bgnotify () { ## args: (title, subtitle)
   if hash terminal-notifier 2>/dev/null; then #osx
     [[ "$TERM_PROGRAM" == 'iTerm.app' ]] && term_id='com.googlecode.iterm2';
     [[ "$TERM_PROGRAM" == 'Apple_Terminal' ]] && term_id='com.apple.terminal';
+    [[ "$TERM_PROGRAM" == 'Hyper' ]] && term_id='co.zeit.hyper';
     ## now call terminal-notifier, (hopefully with $term_id!)
     [ -z "$term_id" ] && terminal-notifier -message "$2" -title "$1" >/dev/null ||
     terminal-notifier -message "$2" -title "$1" -activate "$term_id" -sender "$term_id" >/dev/null
