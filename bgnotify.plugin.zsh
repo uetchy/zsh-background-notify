@@ -37,7 +37,7 @@ bgnotify () { ## args: (title, subtitle)
     [[ "$TERM_PROGRAM" == 'Hyper' ]] && term_id='co.zeit.hyper';
     ## now call terminal-notifier, (hopefully with $term_id!)
     [ -z "$term_id" ] && terminal-notifier -message "$2" -title "$1" >/dev/null ||
-    terminal-notifier -message "$2" -title "$1" -activate "$term_id" -sender "$term_id" >/dev/null
+    terminal-notifier -message "$2" -title "$1" -activate "$term_id" >/dev/null
   elif hash growlnotify 2>/dev/null; then #osx growl
     growlnotify -m "$1" "$2"
   elif hash notify-send 2>/dev/null; then #ubuntu gnome!
